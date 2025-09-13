@@ -1,7 +1,9 @@
 package com.example.todolist
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -28,9 +30,21 @@ class MainActivity : AppCompatActivity() {
 
         val btnAdd = findViewById<FloatingActionButton>(R.id.btnAdd)
 
+        val addTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                val title = data?.getStringExtra(Keys.TITLE_KEY).orEmpty()
+                val description = data?.getStringExtra(Keys.DESCRIPTION_KEY).orEmpty()
+
+                val task = Task(title, description)
+
+                adapter.addTask(task)
+            }
+        }
+
         btnAdd.setOnClickListener {
-            val task = Task("Hello", "Man")
-            adapter.addTask(task)
+            val intent = Intent(this, TaskActivity::class.java)
+            addTaskLauncher.launch(intent)
         }
     }
 }
