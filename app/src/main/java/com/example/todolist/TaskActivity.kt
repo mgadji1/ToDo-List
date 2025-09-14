@@ -40,6 +40,7 @@ class TaskActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, getString(R.string.empty_title), Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 }
